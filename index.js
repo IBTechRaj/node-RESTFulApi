@@ -4,26 +4,18 @@
  */
 
 // Dependencies
-var server = require('./lib/server');
-var workers = require('./lib/workers');
+var http = require('http')
+var url = require('url')
 
-// Declare the app
-var app = {};
+var server = http.createServer(function (req, res) {
+  var parsedUrl = url.parse(req.url, true)
+  var path = parsedUrl.pathname
+  var trimmedPath = path.replace(/^\/+|\/+$/g, '')
+  res.end('Hello World\n')
 
-// Init function
-app.init = function(){
+  console.log('Request received on path: ' + trimmedPath)
+})
 
-  // Start the server
-  server.init();
-
-  // Start the workers
-  workers.init();
-
-};
-
-// Self executing
-app.init();
-
-
-// Export the app
-module.exports = app;
+server.listen(4000, function () {
+  console.log('The server is listening on port 4000 now')
+})
